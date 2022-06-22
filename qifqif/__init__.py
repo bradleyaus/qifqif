@@ -16,7 +16,7 @@ import sys
 import io
 import re
 from prompt_toolkit import prompt
-from prompt_toolkit.completion import WordCompleter
+from prompt_toolkit.completion import WordCompleter, FuzzyCompleter
 
 from qifqif import tags, qifile
 from qifqif.ui import complete_matches, colorize_match
@@ -40,11 +40,12 @@ def quick_input(msg, choices="", sugg=None, clear=False):
     msg = "%s%s" % (msg, (" [%s] ? " % ",".join(choices)) if choices else ": ")
     _input = prompt(
         msg,
-        completer=WordCompleter(
+        completer=FuzzyCompleter(
+            WordCompleter(
             sugg,
             ignore_case=True,
-        ),
-        complete_while_typing=False,
+        )),
+        complete_while_typing=True,
     )
 
     if _input in choices:
